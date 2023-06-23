@@ -56,6 +56,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   setBuiltInZoomControls = true,
   setDisplayZoomControls = false,
   nestedScrollEnabled = false,
+  autoShowKeyboard = true,// Howard added
   startInLoadingState,
   onNavigationStateChange,
   onLoadStart,

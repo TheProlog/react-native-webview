@@ -341,6 +341,7 @@ export interface AndroidNativeWebViewProps extends CommonNativeWebViewProps {
   downloadingMessage?: string;
   lackPermissionToDownloadMessage?: string;
   allowsProtectedMedia?: boolean;
+  autoShowKeyboard?: boolean;// Howard added
 }
 
 export declare type ContentInsetAdjustmentBehavior =
@@ -974,6 +975,11 @@ export interface AndroidWebViewProps extends WebViewSharedProps {
    * @platform android
    */
   allowFileAccess?: boolean;
+
+  /**
+     * Sets auto show Keyboard when user focus on input on Android devices.
+     */
+  autoShowKeyboard?: boolean;
 
   /**
    * Used on Android only, controls whether form autocomplete data should be saved
