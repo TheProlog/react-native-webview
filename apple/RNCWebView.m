@@ -64,8 +64,12 @@ NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
 @end
 #endif // TARGET_OS_OSX
 
-
+// Wrapper to add some extra functionality
 @implementation WKExtWebView : WKWebView
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+  return _hideSelectionContextMenu == YES ? NO : YES;
+}
+
 @end
 
 @interface RNCWebView () <WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler, WKHTTPCookieStoreObserver,
@@ -105,6 +109,7 @@ RCTAutoInsetsProtocol>
   BOOL _savedHideKeyboardAccessoryView;
   BOOL _savedKeyboardDisplayRequiresUserAction;
   BOOL _savedAutoShowKeyboard;
+  BOOL _savedHideSelectionContextMenu;
 
   // Workaround for StatusBar appearance bug for iOS 12
   // https://github.com/react-native-webview/react-native-webview/issues/62
@@ -140,6 +145,7 @@ RCTAutoInsetsProtocol>
     _autoShowKeyboard = YES; // Howard added
     _contentInset = UIEdgeInsetsZero;
     _savedKeyboardDisplayRequiresUserAction = YES;
+    _savedHideSelectionContextMenu = NO;
 #if !TARGET_OS_OSX
     _savedStatusBarStyle = RCTSharedApplication().statusBarStyle;
     _savedStatusBarHidden = RCTSharedApplication().statusBarHidden;
@@ -479,6 +485,7 @@ RCTAutoInsetsProtocol>
     [self setHideKeyboardAccessoryView: _savedHideKeyboardAccessoryView];
     [self setKeyboardDisplayRequiresUserAction: _savedKeyboardDisplayRequiresUserAction];
     [self setAutoShowKeyboard: _savedAutoShowKeyboard];
+    [self setHideSelectionContextMenu: _savedHideSelectionContextMenu];
     [self visitSource];
   }
 #if !TARGET_OS_OSX
@@ -898,6 +905,21 @@ RCTAutoInsetsProtocol>
 #endif // !TARGET_OS_OSX
 
 }
+
+- (void)setHideSelectionContextMenu:(BOOL)hideSelectionContextMenu
+{
+  if (_webView == nil) {
+    _savedHideSelectionContextMenu = hideSelectionContextMenu;
+    return;
+  }
+
+  _hideSelectionContextMenu = hideSelectionContextMenu;
+#if !TARGET_OS_OSX
+  _webView.hideSelectionContextMenu = hideSelectionContextMenu;
+#endif // !TARGET_OS_OSX
+
+}
+
 
 #if !TARGET_OS_OSX
 // UIScrollViewDelegate method

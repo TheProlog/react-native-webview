@@ -15,6 +15,7 @@ import Scrolling from './examples/Scrolling';
 import Background from './examples/Background';
 import Downloads from './examples/Downloads';
 import Uploads from './examples/Uploads';
+import Meldd from './examples/Meldd';
 import Injection from './examples/Injection';
 import LocalPageLoad from './examples/LocalPageLoad';
 import Messaging from './examples/Messaging';
@@ -68,6 +69,14 @@ const TESTS = {
     description: 'Upload test',
     render() {
       return <Uploads />;
+    },
+  },
+  Meldd: {
+    title: 'Meldd',
+    testId: 'meldd',
+    description: 'Hide selection',
+    render() {
+      return <Meldd />;
     },
   },
   Injection: {
@@ -181,6 +190,11 @@ export default class App extends Component<Props, State> {
             testID="testType_messaging"
             title="Messaging"
             onPress={() => this._changeTest('Messaging')}
+          />
+          <Button
+            testID="testType_meldd"
+            title="Meldd"
+            onPress={() => this._changeTest('Meldd')}
           />
           <Button
             testID="testType_nativeWebpage"

@@ -57,6 +57,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   setDisplayZoomControls = false,
   nestedScrollEnabled = false,
   autoShowKeyboard = true,// Howard added
+  hideSelectionContextMenu = false,// Andrej
   startInLoadingState,
   onNavigationStateChange,
   onLoadStart,
@@ -196,6 +197,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     setDisplayZoomControls={setDisplayZoomControls}
     nestedScrollEnabled={nestedScrollEnabled}
     autoShowKeyboard={autoShowKeyboard}
+    hideSelectionContextMenu={hideSelectionContextMenu}
     {...nativeConfig?.props}
   />
 

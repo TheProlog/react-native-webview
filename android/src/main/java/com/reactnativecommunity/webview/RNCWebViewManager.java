@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.view.ActionMode;
+import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
@@ -641,6 +643,15 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     if (autoShowKeyboard != null) {
       view.setFocusableInTouchMode(autoShowKeyboard);
       view.setFocusable(autoShowKeyboard);
+    }
+  }
+
+  @ReactProp(name = "hideSelectionContextMenu")
+  public void setHideSelectionContextMenu(
+    WebView view,
+    @Nullable Boolean hideSelectionContextMenu) {
+    if (hideSelectionContextMenu != null) {
+      ((RNCWebView) view).setHideSelectionContextMenu(hideSelectionContextMenu);
     }
   }
 
@@ -1547,6 +1558,9 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     protected boolean injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true;
 
     protected boolean messagingEnabled = false;
+
+    protected boolean hideSelectionContextMenu = false;
+
     protected @Nullable
     String messagingModuleName;
     protected @Nullable
@@ -1590,6 +1604,37 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     public void setNestedScrollEnabled(boolean nestedScrollEnabled) {
       this.nestedScrollEnabled = nestedScrollEnabled;
     }
+
+    public void setHideSelectionContextMenu(boolean hideSelectionContextMenu) {
+      this.hideSelectionContextMenu = hideSelectionContextMenu;
+    }
+
+    protected ActionMode clearMenu(ActionMode actionMode) {
+      if (actionMode != null) {
+        final Menu menu = actionMode.getMenu();
+        menu.clear();
+      }
+      return actionMode;
+    }
+
+    @Override
+    public ActionMode startActionMode(ActionMode.Callback callback) {
+      ActionMode actionMode = super.startActionMode(callback);
+      if( this.hideSelectionContextMenu) {
+        return this.clearMenu(actionMode);
+      }
+      return actionMode;
+    }
+
+    @Override
+    public ActionMode startActionMode(ActionMode.Callback callback, int type) {
+      ActionMode actionMode = super.startActionMode(callback, type);
+      if( this.hideSelectionContextMenu) {
+        return this.clearMenu(actionMode);
+      }
+      return actionMode;
+    }
+
 
     @Override
     public void onHostResume() {

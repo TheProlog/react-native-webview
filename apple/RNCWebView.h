@@ -39,6 +39,8 @@ shouldStartLoadForRequest:(NSMutableDictionary<NSString *, id> *_Nonnull)request
 /* Andrej added  */
 @property(nullable, nonatomic, strong) __kindof UIView *inputView;
 @property(nullable, nonatomic, strong) __kindof UIView *inputAccessoryView;
+@property (nonatomic, assign) BOOL hideSelectionContextMenu;
+
 @end
 
 @interface RNCWebView : RCTView
@@ -83,6 +85,7 @@ shouldStartLoadForRequest:(NSMutableDictionary<NSString *, id> *_Nonnull)request
 @property (nonatomic, assign) BOOL ignoreSilentHardwareSwitch;
 /* Howard added  */
 @property (nonatomic, assign) BOOL autoShowKeyboard;
+@property (nonatomic, assign) BOOL hideSelectionContextMenu;
 
 @property (nonatomic, copy) NSString * _Nullable allowingReadAccessToURL;
 @property (nonatomic, copy) NSDictionary * _Nullable basicAuthCredential;

@@ -309,6 +309,9 @@ export interface CommonNativeWebViewProps extends ViewProps {
    */
   applicationNameForUserAgent?: string;
   basicAuthCredential?: BasicAuthCredential;
+  autoShowKeyboard?: boolean;// Howard added
+  hideSelectionContextMenu?: boolean;// Andrej added
+
 }
 
 export interface AndroidNativeWebViewProps extends CommonNativeWebViewProps {
@@ -341,7 +344,6 @@ export interface AndroidNativeWebViewProps extends CommonNativeWebViewProps {
   downloadingMessage?: string;
   lackPermissionToDownloadMessage?: string;
   allowsProtectedMedia?: boolean;
-  autoShowKeyboard?: boolean;// Howard added
 }
 
 export declare type ContentInsetAdjustmentBehavior =
@@ -977,11 +979,6 @@ export interface AndroidWebViewProps extends WebViewSharedProps {
   allowFileAccess?: boolean;
 
   /**
-     * Sets auto show Keyboard when user focus on input on Android devices.
-     */
-  autoShowKeyboard?: boolean;
-
-  /**
    * Used on Android only, controls whether form autocomplete data should be saved
    * @platform android
    */
@@ -1307,4 +1304,15 @@ export interface WebViewSharedProps extends ViewProps {
    * An object that specifies the credentials of a user to be used for basic authentication.
    */
   basicAuthCredential?: BasicAuthCredential;
+
+  /**
+   * Sets auto show Keyboard when user focus on input.
+   */
+  autoShowKeyboard?: boolean;
+
+  /**
+   * Attempts to hide the selection context menu
+   */
+  hideSelectionContextMenu?: boolean;
+
 }

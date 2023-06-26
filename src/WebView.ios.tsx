@@ -87,6 +87,8 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
   mediaPlaybackRequiresUserAction,
   dataDetectorTypes,
   incognito,
+  autoShowKeyboard,
+  hideSelectionContextMenu,
   decelerationRate: decelerationRateProp,
   onShouldStartLoadWithRequest: onShouldStartLoadWithRequestProp,
   ...otherProps
@@ -193,7 +195,9 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
       allowsInlineMediaPlayback={allowsInlineMediaPlayback}
       incognito={incognito}
       mediaPlaybackRequiresUserAction={mediaPlaybackRequiresUserAction}
-      ref={webViewRef}
+      autoShowKeyboard={autoShowKeyboard}
+      hideSelectionContextMenu={hideSelectionContextMenu}
+    ref={webViewRef}
       // TODO: find a better way to type this.
       source={resolveAssetSource(source as ImageSourcePropType)}
       style={webViewStyles}
