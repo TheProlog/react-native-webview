@@ -195,6 +195,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     setBuiltInZoomControls={setBuiltInZoomControls}
     setDisplayZoomControls={setDisplayZoomControls}
     nestedScrollEnabled={nestedScrollEnabled}
+    autoShowKeyboard={autoShowKeyboard}
     {...nativeConfig?.props}
   />
 

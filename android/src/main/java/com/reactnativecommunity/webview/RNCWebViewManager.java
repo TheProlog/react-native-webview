@@ -633,7 +633,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     view.getSettings().setAllowFileAccess(allowFileAccess != null && allowFileAccess);
   }
 
-  // Howard added 
+  // Howard added
   @ReactProp(name = "autoShowKeyboard")
   public void setAutoShowKeyboard(
     WebView view,

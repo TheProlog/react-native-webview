@@ -35,6 +35,12 @@ shouldStartLoadForRequest:(NSMutableDictionary<NSString *, id> *_Nonnull)request
 
 @end
 
+@interface WKExtWebView :WKWebView
+/* Andrej added  */
+@property(nullable, nonatomic, strong) __kindof UIView *inputView;
+@property(nullable, nonatomic, strong) __kindof UIView *inputAccessoryView;
+@end
+
 @interface RNCWebView : RCTView
 
 @property (nonatomic, weak) id<RNCWebViewDelegate> _Nullable delegate;
@@ -77,6 +83,7 @@ shouldStartLoadForRequest:(NSMutableDictionary<NSString *, id> *_Nonnull)request
 @property (nonatomic, assign) BOOL ignoreSilentHardwareSwitch;
 /* Howard added  */
 @property (nonatomic, assign) BOOL autoShowKeyboard;
+
 @property (nonatomic, copy) NSString * _Nullable allowingReadAccessToURL;
 @property (nonatomic, copy) NSDictionary * _Nullable basicAuthCredential;
 @property (nonatomic, assign) BOOL pullToRefreshEnabled;

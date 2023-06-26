@@ -64,6 +64,10 @@ NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
 @end
 #endif // TARGET_OS_OSX
 
+
+@implementation WKExtWebView : WKWebView
+@end
+
 @interface RNCWebView () <WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler, WKHTTPCookieStoreObserver,
 #if !TARGET_OS_OSX
 UIScrollViewDelegate,
@@ -81,13 +85,14 @@ RCTAutoInsetsProtocol>
 @property (nonatomic, copy) RCTDirectEventBlock onScroll;
 @property (nonatomic, copy) RCTDirectEventBlock onContentProcessDidTerminate;
 #if !TARGET_OS_OSX
-@property (nonatomic, copy) WKWebView *webView;
+@property (nonatomic, copy) WKExtWebView *webView;
 #else
 @property (nonatomic, copy) RNCWKWebView *webView;
 #endif // !TARGET_OS_OSX
 @property (nonatomic, strong) WKUserScript *postMessageScript;
 @property (nonatomic, strong) WKUserScript *atStartScript;
 @property (nonatomic, strong) WKUserScript *atEndScript;
+@property (nonatomic, strong) UIView *emptyInputView;
 @end
 
 @implementation RNCWebView
@@ -99,6 +104,7 @@ RCTAutoInsetsProtocol>
 #endif // !TARGET_OS_OSX
   BOOL _savedHideKeyboardAccessoryView;
   BOOL _savedKeyboardDisplayRequiresUserAction;
+  BOOL _savedAutoShowKeyboard;
 
   // Workaround for StatusBar appearance bug for iOS 12
   // https://github.com/react-native-webview/react-native-webview/issues/62
@@ -153,6 +159,7 @@ RCTAutoInsetsProtocol>
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 150000 /* iOS 15 */
     _mediaCapturePermissionGrantType = RNCWebViewPermissionGrantType_Prompt;
 #endif
+    _emptyInputView = [[UIView alloc] initWithFrame:CGRectZero];
   }
 
 #if !TARGET_OS_OSX
@@ -429,7 +436,7 @@ RCTAutoInsetsProtocol>
   if (self.window != nil && _webView == nil) {
     WKWebViewConfiguration *wkWebViewConfig = [self setUpWkWebViewConfig];
 #if !TARGET_OS_OSX
-    _webView = [[WKWebView alloc] initWithFrame:self.bounds configuration: wkWebViewConfig];
+    _webView = [[WKExtWebView alloc] initWithFrame:self.bounds configuration: wkWebViewConfig];
 #else
     _webView = [[RNCWKWebView alloc] initWithFrame:self.bounds configuration: wkWebViewConfig];
 #endif // !TARGET_OS_OSX
@@ -471,6 +478,7 @@ RCTAutoInsetsProtocol>
     [self addSubview:_webView];
     [self setHideKeyboardAccessoryView: _savedHideKeyboardAccessoryView];
     [self setKeyboardDisplayRequiresUserAction: _savedKeyboardDisplayRequiresUserAction];
+    [self setAutoShowKeyboard: _savedAutoShowKeyboard];
     [self visitSource];
   }
 #if !TARGET_OS_OSX
@@ -550,10 +558,6 @@ RCTAutoInsetsProtocol>
 }
 -(void)keyboardWillShow
 {
-  if (!_autoShowKeyboard) {
-        [self.webView endEditing: YES];
-        return;
-    }
     if (keyboardTimer != nil) {
         [keyboardTimer invalidate];
     }
@@ -877,7 +881,22 @@ RCTAutoInsetsProtocol>
 
 - (void)setAutoShowKeyboard:(BOOL)autoShowKeyboard
 {
+  if (_webView == nil) {
+    _savedAutoShowKeyboard = autoShowKeyboard;
+    return;
+  }
+
   _autoShowKeyboard = autoShowKeyboard;
+#if !TARGET_OS_OSX
+  if( autoShowKeyboard) {
+    _webView.inputView = nil;
+    _webView.inputAccessoryView = nil;
+  } else {
+    _webView.inputView = _emptyInputView;
+    _webView.inputAccessoryView = _emptyInputView;
+  }
+#endif // !TARGET_OS_OSX
+
 }
 
 #if !TARGET_OS_OSX
